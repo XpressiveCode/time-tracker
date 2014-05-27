@@ -33,7 +33,8 @@ router.get('/:id', function(req, res){
             console.log(response.body);
 
             var tickets = response.body;
-            tickets = tickets || [];
+            if(!tickets.length)tickets = [];
+
             tickets = tickets.filter(function(ticket){
                return ticket.space_id == req.params.id;
             });
