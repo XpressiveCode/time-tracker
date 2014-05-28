@@ -1,12 +1,15 @@
 extends layout.jade
 block content
     form.form-signin(role='form', action='/sessions', method='post')
-        h2.text-center Please sign in&nbsp;
-            small Visit&nbsp;
-                a(href='https://www.assembla.com/user/edit/manage_clients', target='_blank') Assembla Client Manager for Details
+        h2 Please sign in&nbsp;
+        p Visit&nbsp;
+            a(href='https://www.assembla.com/user/edit/manage_clients', target='_blank') Assembla Client Manager for Details
+
+        hr
+
         input#api_key.form-control(placeholder="Your account API key", required="", autofocus="", name="api_key")
         input#api_secret.form-control(placeholder="Your account API key secret", required="", name="api_secret")
-        button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign in
+        button.btn.btn-lg.btn-primary.btn-block.margin-vertical-md(type='submit') Sign in
 
     .alert.alert-warning This service does not persist any information obtained from you or from Assembla on your behalf. <strong>There is no database.</strong> We keep an active session open in order to facilitate the communication between you and Assembla. Once you close the browser, or logout, the session is lost.
 

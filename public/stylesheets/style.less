@@ -1,6 +1,7 @@
 @import "header.less";
 @import "typography.less";
 @import "helpers.less";
+@import "side-menu.less";
 
 /*------------------------*/
 
@@ -39,24 +40,26 @@ body.auth{
   }
 }
 
-
-.menu {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  color: #fff;
-}
-
 .content-primary {
-  -webkit-transition:all .2s linear;
-  -webkit-transform: translate3d(0,0,0);
-  background: #fff;
+  background: #000;
   height: 100%;
 }
 
-.content-primary.active{
-  -webkit-transform: translate3d(77.5%,0,0);
+#main {
+  -moz-transition: 0.2s all ease-in-out;
+  -o-transition: 0.2s all ease-in-out;
+  -webkit-transition: 0.2s all ease-in-out;
+  transition: 0.2s all ease-in-out;
+
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+
+  height: 100%;
+  background: #f5f6f6;
+}
+
+#main.active {
+  -webkit-transform: translate3d(88%,0,0);
 }
 
 .navbar-toggle {
@@ -66,23 +69,8 @@ body.auth{
   margin-bottom: 8px;
 }
 
-.form-signin {
-
-  .form-control:focus {
-    z-index: 2;
-  }
-
-  input#api_key {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  input#api_secret {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
+input, button, select, textarea {
+  margin-bottom: 12px;
 }
 
 .tasks {
@@ -117,5 +105,12 @@ iframe#calendar{
   border: none;
   padding: none;
   margin: none;
+}
+
+hr {
+  border-top: 1px solid #dadede;
+  -moz-box-shadow: white 0 1px;
+  -webkit-box-shadow: white 0 1px;
+  box-shadow: white 0 1px;
 }
 

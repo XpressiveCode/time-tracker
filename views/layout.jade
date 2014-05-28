@@ -26,7 +26,7 @@ html
                             li.divider
                             li
                                 a(href='/calendar', title='Calendar') Calendar
-            .container
+            .container#main
                 #failed-notification.alert.alert-danger.fade
                     strong Title
                     p Content
@@ -49,11 +49,11 @@ html
         script.
             $(function(){
                 $('.navbar-toggle').click(function(){
-                    $('.content-primary').toggleClass('active');
+                    $('#main').toggleClass('active');
                 });
 
                 $('.nav-link').click(function(){
-                    $('.content-primary').toggleClass('active');
+                    $('#main').toggleClass('active');
                 });
 
                 var notifications = $('.alert.in');
