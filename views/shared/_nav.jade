@@ -1,8 +1,8 @@
 .menu
-    h2 Select a space
+    h2.text-center Select a space
     nav
-        ul
+        ul.list-group
             if spaces
                 - each space in spaces
-                    li.nav-link
+                    li.nav-link.list-group-item
                         a(href='/spaces/#{space.id}' title='#{space.name}')= space.name
