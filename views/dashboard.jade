@@ -8,7 +8,7 @@ block content
             - each space in spaces
                 li.list-group-item
                     a(href='/spaces/#{space.id}' title='#{space.name}')= space.name
-                        span.pull-right.badge.danger 4
-                        small 2 days from now
+                        span.pull-right.badge(class='#{space.state}')= space.tickets.length
+                        small= space.due_date
 
 block js

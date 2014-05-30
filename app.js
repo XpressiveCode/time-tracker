@@ -12,7 +12,7 @@ var sessions = require('./routes/sessions');
 var dashboard = require('./routes/dashboard');
 var spaces = require('./routes/spaces');
 
-var sa = require('superagent');
+var assembla = require('./libs/assembla');
 
 var app = express();
 
@@ -50,18 +50,10 @@ app.use(function(req, res, next){
 
 app.use(function(req, res, next){
    if(req.session && req.session.is_valid){
-       var base_url = 'https://api.assembla.com/v1/';
-       sa.get(base_url + 'spaces.json')
-           .set('X-Api-Key', req.session.user.api_key)
-           .set('X-Api-Secret', req.session.user.api_secret)
-           .end(function(err, response){
-               if(!err){
-                   res.locals.spaces = response.body;
-               }
-               console.log(response);
-
-               next();
-           });
+        assembla.getSpaces(req.session.user.api_key, req.session.user.api_secret, function(spaces){
+            res.locals.spaces = spaces;
+            next();
+        });
    }else{
        next();
    }
