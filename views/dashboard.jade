@@ -8,6 +8,7 @@ block content
             - each space in spaces
                 li.list-group-item
                     a(href='/spaces/#{space.id}' title='#{space.name}')= space.name
-                        span.pull-right >
+                        span.pull-right.badge.danger 4
+                        small 2 days from now
 
 block js
