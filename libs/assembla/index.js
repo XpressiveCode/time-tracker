@@ -16,6 +16,7 @@ assembla.getSpaces = function(key, secret, next){
             spaces.forEach(function(space){
                 space.state = 'default';
                 space.due_date = '';
+                space.due_days = 1000;
 
                 assembla.getTickets(key, secret, space.id, function(tickets){
                     space.tickets = tickets;
@@ -34,6 +35,7 @@ assembla.getSpaces = function(key, secret, next){
                                 ticket.due_date_str = ticket.due_date.fromNow();
 
                                 var diff = ticket.due_date.diff(moment(), 'days');
+                                space.due_days = diff;
 
                                 if(diff < 0){
                                     ticket.state = 'danger';
@@ -45,8 +47,8 @@ assembla.getSpaces = function(key, secret, next){
 
                         // sort
                         space.tickets.sort(function (t1, t2) {
-                            if (t1.due_date > t2.due_date) return -1;
-                            if (t1.due_date < t2.due_date) return 1;
+                            if (t1.due_date > t2.due_date) return 1;
+                            if (t1.due_date < t2.due_date) return -1;
                             return 0;
                         });
 
@@ -57,6 +59,12 @@ assembla.getSpaces = function(key, secret, next){
                     i++;
 
                     if(i == spaces.length){
+                        spaces.sort(function(s1, s2){
+                            if(s1.due_days > s2.due_days)return 1;
+                            if(s1.due_days < s2.due_days)return -1;
+                            return 0;
+
+                        });
                         if(next){
                             next(spaces);
                         }

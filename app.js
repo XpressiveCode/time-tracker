@@ -59,6 +59,19 @@ app.use(function(req, res, next){
    }
 });
 
+var ensure_login = function(req, res, next){
+    if(req.session && req.session.is_valid)return next();
+
+    return res.redirect('/');
+}
+
+app.all('/users*', ensure_login);
+app.all('/dashboard*', ensure_login);
+app.all('/spaces*', ensure_login);
+app.all('/calendar', ensure_login);
+app.all('/authorize', ensure_login);
+
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/sessions', sessions);
