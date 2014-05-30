@@ -19,46 +19,37 @@ router.get('/tasks', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-    var base_url = 'https://api.assembla.com/v1/';
+    var space = res.locals.spaces.filter(function(space){
+        return space.id == req.params.id;
+    });
 
-    var api_key = req.session.user.api_key;
-    var api_secret = req.session.user.api_secret;
+    if(space.length)space = space[0];
+    if(!space)return res.send(500, 'no space found with id: ' + req.params.id);
 
-    sa.get(base_url + '/spaces/' + req.params.id + '/tickets/my_active.json')
-        .set('X-Api-Key', api_key)
-        .set('X-Api-Secret', api_secret)
-        .end(function(err, response){
-            if(err)return res.send(500, err);
+    // if we only have 1 ticket, redirect to it instead
+    if(space.tickets.length == 1){
+        return res.redirect('/spaces/' + space.id + '/tickets/' + space.tickets[0].id);
+    }
 
-            console.log(response.body);
-
-            var tickets = response.body;
-            if(!tickets.length)tickets = [];
-
-            tickets = tickets.filter(function(ticket){
-               return ticket.space_id == req.params.id;
-            });
-
-            return res.render('space', { space_id: req.params.id, tickets: tickets });
-        });
+    return res.render('space', { space_id: req.params.id, tickets: space.tickets });
 });
 
 router.get('/:id/tickets/:ticket_id', function(req, res){
-    var base_url = 'https://api.assembla.com/v1/';
+    var space = res.locals.spaces.filter(function(space){
+        return space.id == req.params.id;
+    });
 
-    var api_key = req.session.user.api_key;
-    var api_secret = req.session.user.api_secret;
+    if(space.length)space = space[0];
+    if(!space)return res.send(500, 'no space found with id: ' + req.params.id);
 
-    sa.get(base_url + '/spaces/' + req.params.id + '/tickets/id/' + req.params.ticket_id + '.json')
-        .set('X-Api-Key', api_key)
-        .set('X-Api-Secret', api_secret)
-        .end(function(err, response){
-            if(err)return res.send(500, err);
+    var ticket = space.tickets.filter(function(ticket){
+        return ticket.id == req.params.ticket_id;
+    });
 
-            console.log(response.body);
+    if(ticket.length)ticket = ticket[0];
+    if(!ticket)return res.send(500, 'no ticket found with id: ' + req.params.ticket_id);
 
-            return res.render('ticket', { space_id: req.params.id, ticket: response.body });
-        });
+    return res.render('ticket', { space_id: req.params.id, ticket: ticket });
 });
 
 router.post('/:id/tickets/:ticket_id', function(req, res){

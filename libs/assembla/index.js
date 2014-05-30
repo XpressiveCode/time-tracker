@@ -14,9 +14,11 @@ assembla.getSpaces = function(key, secret, next){
 
             var i = 0;
             spaces.forEach(function(space){
+                space.state = 'default';
+                space.due_date = '';
+
                 assembla.getTickets(key, secret, space.id, function(tickets){
                     space.tickets = tickets;
-                    space.state = 'default'; // fine
 
                     // sort and also get ticket with closest due date
                     if(space.tickets.length) {
@@ -24,9 +26,20 @@ assembla.getSpaces = function(key, secret, next){
                         // add due date
                         space.tickets.forEach(function (ticket) {
                             ticket.due_date = null;
+                            ticket.state = 'default';
+
                             if (ticket.custom_fields && ticket.custom_fields["Due Date"]) {
                                 var d = moment(ticket.custom_fields["Due Date"]);
                                 ticket.due_date = d;
+                                ticket.due_date_str = ticket.due_date.fromNow();
+
+                                var diff = ticket.due_date.diff(moment(), 'days');
+
+                                if(diff < 0){
+                                    ticket.state = 'danger';
+                                }else if(diff < 5){
+                                    ticket.state = 'warning';
+                                }
                             }
                         });
 
@@ -37,30 +50,14 @@ assembla.getSpaces = function(key, secret, next){
                             return 0;
                         });
 
-                        space.due_date = space.tickets[0].due_date;
-                        if(space.due_date) {
-                            space.due_date = space.due_date.fromNow();
-
-                            // check threshold for when things are due to show proper badge colour
-
-                            // TODO make these configurable later on?
-                            // TODO maybe not pass class names here? use status codes, not sure yet
-                            var diff = space.tickets[0].due_date.diff(moment(), 'days');
-                            if(diff < 0){
-                                space.state = 'danger';
-                            }else if(diff < 5){
-                                space.state = 'warning';
-                            }
-
-                            space.days = diff;
-                        }
+                        space.due_date = space.tickets[0].due_date_str;
+                        space.state = space.tickets[0].state;
                     }
 
                     i++;
 
                     if(i == spaces.length){
                         if(next){
-                            console.log('spaces found: ', spaces);
                             next(spaces);
                         }
                     }

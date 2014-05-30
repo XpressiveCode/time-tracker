@@ -5,4 +5,7 @@
             if spaces
                 - each space in spaces
                     li.nav-link.list-group-item
-                        a(href='/spaces/#{space.id}' title='#{space.name}') #{space.name} #{space.tickets.length}
+                        a(href='/spaces/#{space.id}' title='#{space.name}') #{space.name}
+                            span.pull-right.badge(class='#{space.state}')= space.tickets.length
+                            small= space.due_date
+

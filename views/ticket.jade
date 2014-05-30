@@ -2,7 +2,7 @@ extends layout
 block content
     h2.text-center Task #{ticket.number}
         span.label.label-default= ticket.summary
-    small Due: not implemented yet
+    small Due: #{ticket.due_date_str}
     p!= ticket.description.replace(/\n/gmi, '<br />')
     button#timer.btn.btn-lg.btn-success.btn-block(type='button') Start Timer
     #duration-container.alert.alert-info.fade.text-center
